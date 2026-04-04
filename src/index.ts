@@ -183,6 +183,11 @@ function* enumerateDiffs(
   yield* enumerateOwnPropertyDiffs(left, right, path, state)
 }
 
+const isObject = (value: unknown): value is object => {
+  const type = typeof value
+  return (type === `object` && !!value) || type === `function`
+}
+
 const pathsEqual = (
   path1: Path | undefined,
   path2: Path | undefined,
@@ -347,13 +352,92 @@ const getInternalSlots = (
       break
     }
     case `Temporal.Duration`:
+      slots.Years = accessGetter(Temporal.Duration, `years`, value)
+      slots.Months = accessGetter(Temporal.Duration, `months`, value)
+      slots.Weeks = accessGetter(Temporal.Duration, `weeks`, value)
+      slots.Days = accessGetter(Temporal.Duration, `days`, value)
+      slots.Hours = accessGetter(Temporal.Duration, `hours`, value)
+      slots.Minutes = accessGetter(Temporal.Duration, `minutes`, value)
+      slots.Seconds = accessGetter(Temporal.Duration, `seconds`, value)
+      slots.Milliseconds = accessGetter(
+        Temporal.Duration,
+        `milliseconds`,
+        value,
+      )
+      slots.Microseconds = accessGetter(
+        Temporal.Duration,
+        `microseconds`,
+        value,
+      )
+      slots.Nanoseconds = accessGetter(Temporal.Duration, `nanoseconds`, value)
+      break
     case `Temporal.Instant`:
+      slots.EpochNanoseconds = accessGetter(
+        Temporal.Instant,
+        `epochNanoseconds`,
+        value,
+      )
+      break
     case `Temporal.PlainDate`:
+      slots.Calendar = accessGetter(Temporal.PlainDate, `calendarId`, value)
+      slots.Year = accessGetter(Temporal.PlainDate, `year`, value)
+      slots.Month = accessGetter(Temporal.PlainDate, `month`, value)
+      slots.Day = accessGetter(Temporal.PlainDate, `day`, value)
+      break
     case `Temporal.PlainDateTime`:
+      slots.Calendar = accessGetter(Temporal.PlainDateTime, `calendarId`, value)
+      slots.Year = accessGetter(Temporal.PlainDateTime, `year`, value)
+      slots.Month = accessGetter(Temporal.PlainDateTime, `month`, value)
+      slots.Day = accessGetter(Temporal.PlainDateTime, `day`, value)
+      slots.Hour = accessGetter(Temporal.PlainDateTime, `hour`, value)
+      slots.Minute = accessGetter(Temporal.PlainDateTime, `minute`, value)
+      slots.Second = accessGetter(Temporal.PlainDateTime, `second`, value)
+      slots.Millisecond = accessGetter(
+        Temporal.PlainDateTime,
+        `millisecond`,
+        value,
+      )
+      slots.Microsecond = accessGetter(
+        Temporal.PlainDateTime,
+        `microsecond`,
+        value,
+      )
+      slots.Nanosecond = accessGetter(
+        Temporal.PlainDateTime,
+        `nanosecond`,
+        value,
+      )
+      break
     case `Temporal.PlainMonthDay`:
+      slots.Calendar = accessGetter(Temporal.PlainMonthDay, `calendarId`, value)
+      slots.MonthCode = accessGetter(Temporal.PlainMonthDay, `monthCode`, value)
+      slots.Day = accessGetter(Temporal.PlainMonthDay, `day`, value)
+      break
     case `Temporal.PlainTime`:
+      slots.Hour = accessGetter(Temporal.PlainTime, `hour`, value)
+      slots.Minute = accessGetter(Temporal.PlainTime, `minute`, value)
+      slots.Second = accessGetter(Temporal.PlainTime, `second`, value)
+      slots.Millisecond = accessGetter(Temporal.PlainTime, `millisecond`, value)
+      slots.Microsecond = accessGetter(Temporal.PlainTime, `microsecond`, value)
+      slots.Nanosecond = accessGetter(Temporal.PlainTime, `nanosecond`, value)
+      break
     case `Temporal.PlainYearMonth`:
+      slots.Calendar = accessGetter(
+        Temporal.PlainYearMonth,
+        `calendarId`,
+        value,
+      )
+      slots.Year = accessGetter(Temporal.PlainYearMonth, `year`, value)
+      slots.Month = accessGetter(Temporal.PlainYearMonth, `month`, value)
+      break
     case `Temporal.ZonedDateTime`:
+      slots.Calendar = accessGetter(Temporal.ZonedDateTime, `calendarId`, value)
+      slots.TimeZone = accessGetter(Temporal.ZonedDateTime, `timeZoneId`, value)
+      slots.EpochNanoseconds = accessGetter(
+        Temporal.ZonedDateTime,
+        `epochNanoseconds`,
+        value,
+      )
       break
   }
 
@@ -376,11 +460,6 @@ const accessGetter = (
     }
   }
   throw new Error(`No getter found for ${key}`)
-}
-
-const isObject = (value: unknown): value is object => {
-  const type = typeof value
-  return (type === `object` && !!value) || type === `function`
 }
 
 function* enumerateOwnPropertyDiffs(
