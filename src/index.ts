@@ -284,8 +284,6 @@ const getInternalSlots = (
       // https://tc39.es/ecma262/#sec-function.prototype.tostring
       slots.SourceText = Function.prototype.toString.call(value)
       break
-    case `Promise`:
-      break
     case `Date`:
       // https://tc39.es/ecma262/#sec-date.prototype.gettime
       slots.DateValue = Date.prototype.getTime.call(value as Date)
