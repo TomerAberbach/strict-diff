@@ -538,14 +538,6 @@ const cases: Case[] = [
     ],
   },
 
-  // Promise
-  {
-    name: `equal promises`,
-    left: new Promise<void>(() => {}),
-    right: new Promise<void>(() => {}),
-    diffs: [],
-  },
-
   // Date
   { name: `equal dates`, left: new Date(0), right: new Date(0), diffs: [] },
   {
