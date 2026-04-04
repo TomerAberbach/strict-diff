@@ -6,6 +6,7 @@ export default defineConfig([
   {
     entry: `src/index.ts`,
     platform: `neutral`,
+    minify: false,
     sourcemap: `inline`,
     dts: false,
     publint: true,
