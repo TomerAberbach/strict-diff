@@ -15,25 +15,34 @@ type Case = {
 }
 
 const cases: Case[] = [
-  // Primitives
-  { name: `equal null`, left: null, right: null, diffs: [] },
-  { name: `equal undefined`, left: undefined, right: undefined, diffs: [] },
-  { name: `equal false`, left: false, right: false, diffs: [] },
-  { name: `equal true`, left: true, right: true, diffs: [] },
-  { name: `equal integer`, left: 1, right: 1, diffs: [] },
-  { name: `equal number`, left: 1.1, right: 1.1, diffs: [] },
-  { name: `equal +0`, left: 0, right: 0, diffs: [] },
-  { name: `equal -0`, left: -0, right: -0, diffs: [] },
-  { name: `equal Infinity`, left: Infinity, right: Infinity, diffs: [] },
-  { name: `equal -Infinity`, left: -Infinity, right: -Infinity, diffs: [] },
-  { name: `equal NaN`, left: Number.NaN, right: Number.NaN, diffs: [] },
-  { name: `equal string`, left: `hello`, right: `hello`, diffs: [] },
+  // Null and undefined
+  { name: `equal nulls`, left: null, right: null, diffs: [] },
+  { name: `equal undefineds`, left: undefined, right: undefined, diffs: [] },
   {
     name: `non-equal null and undefined`,
     left: null,
     right: undefined,
     diffs: [{ kind: `type`, path: [], left: `null`, right: `undefined` }],
   },
+
+  // Boolean
+  { name: `equal false booleans`, left: false, right: false, diffs: [] },
+  { name: `equal true booleans`, left: true, right: true, diffs: [] },
+  {
+    name: `non-equal booleans`,
+    left: true,
+    right: false,
+    diffs: [{ kind: `value`, path: [], left: true, right: false }],
+  },
+
+  // Number
+  { name: `equal numbers`, left: 1.1, right: 1.1, diffs: [] },
+  { name: `equal integers`, left: 1, right: 1, diffs: [] },
+  { name: `equal +0`, left: 0, right: 0, diffs: [] },
+  { name: `equal -0`, left: -0, right: -0, diffs: [] },
+  { name: `equal Infinity`, left: Infinity, right: Infinity, diffs: [] },
+  { name: `equal -Infinity`, left: -Infinity, right: -Infinity, diffs: [] },
+  { name: `equal NaN`, left: Number.NaN, right: Number.NaN, diffs: [] },
   {
     name: `non-equal integers`,
     left: 1,
@@ -47,11 +56,20 @@ const cases: Case[] = [
     diffs: [{ kind: `value`, path: [], left: -0, right: 0 }],
   },
 
+  // String
+  { name: `equal strings`, left: `hello`, right: `hello`, diffs: [] },
+  {
+    name: `non-equal strings`,
+    left: `hello`,
+    right: `hi`,
+    diffs: [{ kind: `value`, path: [], left: `hello`, right: `hi` }],
+  },
+
   // Objects
   { name: `equal empty objects`, left: {}, right: {}, diffs: [] },
   { name: `equal objects`, left: { a: 1 }, right: { a: 1 }, diffs: [] },
   {
-    name: `objects with different property values`,
+    name: `non-equal object property values`,
     left: { a: 1 },
     right: { a: 2 },
     diffs: [
@@ -67,19 +85,19 @@ const cases: Case[] = [
     ],
   },
   {
-    name: `objects with different keys`,
+    name: `non-equal object keys`,
     left: { a: 1 },
     right: { b: 1 },
     diffs: [{ kind: `key`, path: [], index: 0, left: `a`, right: `b` }],
   },
   {
-    name: `objects with extra key on right`,
+    name: `non-equal objects with extra key on right`,
     left: {},
     right: { a: 1 },
     diffs: [{ kind: `key`, path: [], index: 0, left: undefined, right: `a` }],
   },
   {
-    name: `non-writable vs writable property`,
+    name: `non-equal objects with non-writable vs writable property`,
     left: Object.defineProperty({}, `a`, {
       value: 1,
       writable: false,
@@ -100,7 +118,7 @@ const cases: Case[] = [
     ],
   },
   {
-    name: `non-extensible vs extensible`,
+    name: `non-equal objects with non-extensible vs extensible`,
     left: Object.preventExtensions({}),
     right: {},
     diffs: [
@@ -113,7 +131,7 @@ const cases: Case[] = [
     ],
   },
   {
-    name: `objects with different prototypes`,
+    name: `non-equal object prototypes`,
     left: Object.create(null) as object,
     right: {},
     diffs: [
@@ -128,7 +146,7 @@ const cases: Case[] = [
   (() => {
     const symbol = Symbol(`test`)
     return {
-      name: `equal objects with symbol key`,
+      name: `equal objects with symbol keys`,
       left: { [symbol]: 1 },
       right: { [symbol]: 1 },
       diffs: [],
@@ -137,7 +155,7 @@ const cases: Case[] = [
   (() => {
     const symbol = Symbol(`test`)
     return {
-      name: `objects with different symbol key values`,
+      name: `non-equal object symbol key values`,
       left: { [symbol]: 1 },
       right: { [symbol]: 2 },
       diffs: [
@@ -159,7 +177,7 @@ const cases: Case[] = [
     const right: Record<string, unknown> = {}
     right.self = right
     return {
-      name: `circular references with same structure`,
+      name: `equal circular references with same structure`,
       left,
       right,
       diffs: [],
@@ -171,7 +189,7 @@ const cases: Case[] = [
     const rightShared = {}
     const right = [rightShared, rightShared]
     return {
-      name: `shared references with same structure`,
+      name: `equal shared references with same structure`,
       left,
       right,
       diffs: [],
@@ -185,7 +203,7 @@ const cases: Case[] = [
     const rightShared2 = {}
     const right = [rightShared1, rightShared2, rightShared1, rightShared1]
     return {
-      name: `shared references with partially same structure`,
+      name: `non-equal shared references with partially same structure`,
       left,
       right,
       diffs: [
@@ -220,7 +238,7 @@ const cases: Case[] = [
       { kind: `internal-slot` as const, slot: `Value` },
     ]
     return {
-      name: `shared reference vs non-shared reference`,
+      name: `non-equal shared reference vs non-shared reference`,
       left,
       right,
       diffs: [
@@ -237,7 +255,7 @@ const cases: Case[] = [
   // Arrays
   { name: `equal arrays`, left: [1, 2], right: [1, 2], diffs: [] },
   {
-    name: `arrays with different elements`,
+    name: `non-equal array elements`,
     left: [1, 2],
     right: [1, 3],
     diffs: [
@@ -276,6 +294,12 @@ const cases: Case[] = [
 
   // Number wrappers
   {
+    name: `equal Number wrappers`,
+    left: Object(1),
+    right: Object(1),
+    diffs: [],
+  },
+  {
     name: `non-equal Number wrappers`,
     left: Object(1),
     right: Object(2),
@@ -290,6 +314,12 @@ const cases: Case[] = [
   },
 
   // BigInt wrappers
+  {
+    name: `equal BigInt wrappers`,
+    left: Object(1n),
+    right: Object(1n),
+    diffs: [],
+  },
   {
     name: `non-equal BigInt wrappers`,
     left: Object(1n),
@@ -310,6 +340,28 @@ const cases: Case[] = [
     left: Object(`a`),
     right: Object(`a`),
     diffs: [],
+  },
+  {
+    name: `non-equal String wrappers`,
+    left: Object(`a`),
+    right: Object(`b`),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `StringData` }],
+        left: `a`,
+        right: `b`,
+      },
+      {
+        kind: `value`,
+        path: [
+          { kind: `property`, index: 0, key: 0 },
+          { kind: `internal-slot`, slot: `Value` },
+        ],
+        left: `a`,
+        right: `b`,
+      },
+    ],
   },
 
   // Symbol wrappers
@@ -342,13 +394,13 @@ const cases: Case[] = [
 
   // Map
   {
-    name: `equal maps`,
+    name: `equal Maps`,
     left: new Map([[1, `a`]]),
     right: new Map([[1, `a`]]),
     diffs: [],
   },
   {
-    name: `maps with different entry values`,
+    name: `non-equal Map entry values`,
     left: new Map([[1, `a`]]),
     right: new Map([[1, `b`]]),
     diffs: [
@@ -369,13 +421,13 @@ const cases: Case[] = [
 
   // Set
   {
-    name: `equal sets`,
+    name: `equal Sets`,
     left: new Set([1, 2]),
     right: new Set([1, 2]),
     diffs: [],
   },
   {
-    name: `sets with different values`,
+    name: `non-equal Set values`,
     left: new Set([1, 2]),
     right: new Set([1, 3]),
     diffs: [
@@ -400,7 +452,7 @@ const cases: Case[] = [
   (() => {
     const [left, right] = [() => 1, () => 2]
     return {
-      name: `functions with different bodies`,
+      name: `non-equal function bodies`,
       left,
       right,
       diffs: [
@@ -427,7 +479,7 @@ const cases: Case[] = [
       },
     ]
     return {
-      name: `generator functions with different bodies`,
+      name: `non-equal generator function bodies`,
       left,
       right,
       diffs: [
@@ -447,7 +499,7 @@ const cases: Case[] = [
   (() => {
     const [left, right] = [async () => 1, async () => 2]
     return {
-      name: `async functions with different bodies`,
+      name: `non-equal async function bodies`,
       left,
       right,
       diffs: [
@@ -464,7 +516,7 @@ const cases: Case[] = [
     const foo = () => {}
     const bar = () => {}
     return {
-      name: `functions with different names`,
+      name: `non-equal function names`,
       left: foo,
       right: bar,
       diffs: [
@@ -486,7 +538,7 @@ const cases: Case[] = [
       (_a: unknown, _b: unknown) => {},
     ]
     return {
-      name: `functions with different lengths`,
+      name: `non-equal function lengths`,
       left,
       right,
       diffs: [
@@ -509,7 +561,7 @@ const cases: Case[] = [
     }
   })(),
   {
-    name: `async function vs non-async function`,
+    name: `non-equal async function vs non-async function`,
     left: async () => {},
     right: () => {},
     diffs: [
@@ -517,7 +569,7 @@ const cases: Case[] = [
     ],
   },
   {
-    name: `generator function vs non-generator function`,
+    name: `non-equal generator function vs non-generator function`,
     *left() {},
     right: () => {},
     diffs: [
@@ -525,7 +577,7 @@ const cases: Case[] = [
     ],
   },
   {
-    name: `async generator function vs async function`,
+    name: `non-equal async generator function vs async function`,
     async *left() {},
     right: async () => {},
     diffs: [
@@ -539,9 +591,9 @@ const cases: Case[] = [
   },
 
   // Date
-  { name: `equal dates`, left: new Date(0), right: new Date(0), diffs: [] },
+  { name: `equal Dates`, left: new Date(0), right: new Date(0), diffs: [] },
   {
-    name: `dates with different values`,
+    name: `non-equal Date values`,
     left: new Date(0),
     right: new Date(1),
     diffs: [
@@ -555,9 +607,9 @@ const cases: Case[] = [
   },
 
   // RegExp
-  { name: `equal regexps`, left: /foo/g, right: /foo/g, diffs: [] },
+  { name: `equal RegExps`, left: /foo/g, right: /foo/g, diffs: [] },
   {
-    name: `regexps with different sources`,
+    name: `non-equal RegExp sources`,
     left: /foo/,
     right: /bar/,
     diffs: [
@@ -570,10 +622,29 @@ const cases: Case[] = [
     ],
   },
   {
-    name: `regexps with different flags`,
+    name: `non-equal RegExp flags`,
     left: /foo/g,
     right: /foo/i,
     diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `OriginalFlags` }],
+        left: `g`,
+        right: `i`,
+      },
+    ],
+  },
+  {
+    name: `non-equal RegExps`,
+    left: /foo/g,
+    right: /bar/i,
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `OriginalSource` }],
+        left: `foo`,
+        right: `bar`,
+      },
       {
         kind: `value`,
         path: [{ kind: `internal-slot`, slot: `OriginalFlags` }],
@@ -591,7 +662,7 @@ const cases: Case[] = [
     diffs: [],
   },
   {
-    name: `URLs with different paths`,
+    name: `non-equal URL paths`,
     left: new URL(`https://example.com/a`),
     right: new URL(`https://example.com/b`),
     diffs: [
@@ -612,7 +683,7 @@ const cases: Case[] = [
     diffs: [],
   },
   {
-    name: `URLSearchParams with different values`,
+    name: `non-equal URLSearchParams values`,
     left: new URLSearchParams(`a=1`),
     right: new URLSearchParams(`a=2`),
     diffs: [
@@ -632,6 +703,23 @@ const cases: Case[] = [
     right: new WeakRef({}),
     diffs: [],
   },
+  {
+    name: `non-equal WeakRefs`,
+    left: new WeakRef({ a: 1 }),
+    right: new WeakRef({ a: 2 }),
+    diffs: [
+      {
+        kind: `value`,
+        path: [
+          { kind: `internal-slot`, slot: `WeakRefTarget` },
+          { kind: `property`, index: 0, key: `a` },
+          { kind: `internal-slot`, slot: `Value` },
+        ],
+        left: 1,
+        right: 2,
+      },
+    ],
+  },
 
   // ArrayBuffer
   {
@@ -646,12 +734,102 @@ const cases: Case[] = [
     const buffer2 = new ArrayBuffer(8)
     buffer2.transfer()
     return {
-      name: `detached ArrayBuffers compare equal`,
+      name: `equal detached ArrayBuffers`,
       left: buffer1,
       right: buffer2,
       diffs: [],
     }
   })(),
+  (() => {
+    const left = new ArrayBuffer(4)
+    new DataView(left).setUint8(0, 1)
+    const right = new ArrayBuffer(4)
+    new DataView(right).setUint8(0, 2)
+    return {
+      name: `non-equal ArrayBuffer bytes`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [
+            { kind: `internal-slot`, slot: `ArrayBufferData` },
+            { kind: `property`, index: 0, key: 0 },
+            { kind: `internal-slot`, slot: `Value` },
+          ],
+          left: 1,
+          right: 2,
+        },
+      ],
+    }
+  })(),
+  {
+    name: `non-equal ArrayBuffer maxByteLengths`,
+    left: new ArrayBuffer(4, { maxByteLength: 8 }),
+    right: new ArrayBuffer(4, { maxByteLength: 16 }),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `ArrayBufferMaxByteLength` }],
+        left: 8,
+        right: 16,
+      },
+    ],
+  },
+  {
+    name: `non-equal ArrayBuffers`,
+    left: new ArrayBuffer(4),
+    right: new ArrayBuffer(8),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `ArrayBufferByteLength` }],
+        left: 4,
+        right: 8,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `ArrayBufferMaxByteLength` }],
+        left: 4,
+        right: 8,
+      },
+      {
+        kind: `key`,
+        path: [{ kind: `internal-slot`, slot: `ArrayBufferData` }],
+        index: 4,
+        left: `length`,
+        right: 4,
+      },
+      {
+        kind: `key`,
+        path: [{ kind: `internal-slot`, slot: `ArrayBufferData` }],
+        index: 5,
+        left: undefined,
+        right: 5,
+      },
+      {
+        kind: `key`,
+        path: [{ kind: `internal-slot`, slot: `ArrayBufferData` }],
+        index: 6,
+        left: undefined,
+        right: 6,
+      },
+      {
+        kind: `key`,
+        path: [{ kind: `internal-slot`, slot: `ArrayBufferData` }],
+        index: 7,
+        left: undefined,
+        right: 7,
+      },
+      {
+        kind: `key`,
+        path: [{ kind: `internal-slot`, slot: `ArrayBufferData` }],
+        index: 8,
+        left: undefined,
+        right: `length`,
+      },
+    ],
+  },
 
   // TypedArray
   {
@@ -660,6 +838,160 @@ const cases: Case[] = [
     right: new Uint8Array([1, 2, 3]),
     diffs: [],
   },
+  (() => {
+    const buf = new ArrayBuffer(8)
+    return {
+      name: `non-equal Uint8Array byteOffsets`,
+      left: new Uint8Array(buf, 0, 4),
+      right: new Uint8Array(buf, 4, 4),
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `ByteOffset` }],
+          left: 0,
+          right: 4,
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const buffer = new ArrayBuffer(8)
+    return {
+      name: `non-equal Uint8Array byteLengths`,
+      left: new Uint8Array(buffer, 0, 4),
+      right: new Uint8Array(buffer, 0, 6),
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `ByteLength` }],
+          left: 4,
+          right: 6,
+        },
+        {
+          kind: `key`,
+          path: [],
+          index: 4,
+          left: undefined,
+          right: 4,
+        },
+        {
+          kind: `key`,
+          path: [],
+          index: 5,
+          left: undefined,
+          right: 5,
+        },
+      ],
+    }
+  })(),
+  {
+    name: `non-equal Uint8Array buffers`,
+    left: new Uint8Array([1, 2, 3]),
+    right: new Uint8Array([1, 2, 4]),
+    diffs: [
+      {
+        kind: `value`,
+        path: [
+          { kind: `internal-slot`, slot: `ViewedArrayBuffer` },
+          { kind: `internal-slot`, slot: `ArrayBufferData` },
+          { kind: `property`, index: 2, key: 2 },
+          { kind: `internal-slot`, slot: `Value` },
+        ],
+        left: 3,
+        right: 4,
+      },
+      {
+        kind: `value`,
+        path: [
+          { kind: `property`, index: 2, key: 2 },
+          { kind: `internal-slot`, slot: `Value` },
+        ],
+        left: 3,
+        right: 4,
+      },
+    ],
+  },
+  {
+    name: `non-equal Uint8Arrays`,
+    left: new Uint8Array(new ArrayBuffer(4)),
+    right: new Uint8Array(new ArrayBuffer(6), 2, 2),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `ByteOffset` }],
+        left: 0,
+        right: 2,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `ByteLength` }],
+        left: 4,
+        right: 2,
+      },
+      {
+        kind: `value`,
+        path: [
+          { kind: `internal-slot`, slot: `ViewedArrayBuffer` },
+          { kind: `internal-slot`, slot: `ArrayBufferByteLength` },
+        ],
+        left: 4,
+        right: 6,
+      },
+      {
+        kind: `value`,
+        path: [
+          { kind: `internal-slot`, slot: `ViewedArrayBuffer` },
+          { kind: `internal-slot`, slot: `ArrayBufferMaxByteLength` },
+        ],
+        left: 4,
+        right: 6,
+      },
+      {
+        kind: `key`,
+        path: [
+          { kind: `internal-slot`, slot: `ViewedArrayBuffer` },
+          { kind: `internal-slot`, slot: `ArrayBufferData` },
+        ],
+        index: 4,
+        left: `length`,
+        right: 4,
+      },
+      {
+        kind: `key`,
+        path: [
+          { kind: `internal-slot`, slot: `ViewedArrayBuffer` },
+          { kind: `internal-slot`, slot: `ArrayBufferData` },
+        ],
+        index: 5,
+        left: undefined,
+        right: 5,
+      },
+      {
+        kind: `key`,
+        path: [
+          { kind: `internal-slot`, slot: `ViewedArrayBuffer` },
+          { kind: `internal-slot`, slot: `ArrayBufferData` },
+        ],
+        index: 6,
+        left: undefined,
+        right: `length`,
+      },
+      {
+        kind: `key`,
+        path: [],
+        index: 2,
+        left: 2,
+        right: undefined,
+      },
+      {
+        kind: `key`,
+        path: [],
+        index: 3,
+        left: 3,
+        right: undefined,
+      },
+    ],
+  },
 
   // DataView
   {
@@ -667,6 +999,129 @@ const cases: Case[] = [
     left: new DataView(new ArrayBuffer(4)),
     right: new DataView(new ArrayBuffer(4)),
     diffs: [],
+  },
+  (() => {
+    const buf = new ArrayBuffer(8)
+    return {
+      name: `non-equal DataView byteOffsets`,
+      left: new DataView(buf, 0, 4),
+      right: new DataView(buf, 4, 4),
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `ByteOffset` }],
+          left: 0,
+          right: 4,
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const buf = new ArrayBuffer(8)
+    return {
+      name: `non-equal DataView byteLengths`,
+      left: new DataView(buf, 0, 4),
+      right: new DataView(buf, 0, 6),
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `ByteLength` }],
+          left: 4,
+          right: 6,
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const left = new ArrayBuffer(4)
+    new DataView(left).setUint8(0, 1)
+    const right = new ArrayBuffer(4)
+    new DataView(right).setUint8(0, 2)
+    return {
+      name: `non-equal DataView buffers`,
+      left: new DataView(left),
+      right: new DataView(right),
+      diffs: [
+        {
+          kind: `value`,
+          path: [
+            { kind: `internal-slot`, slot: `ViewedArrayBuffer` },
+            { kind: `internal-slot`, slot: `ArrayBufferData` },
+            { kind: `property`, index: 0, key: 0 },
+            { kind: `internal-slot`, slot: `Value` },
+          ],
+          left: 1,
+          right: 2,
+        },
+      ],
+    }
+  })(),
+  {
+    name: `non-equal DataViews`,
+    left: new DataView(new ArrayBuffer(4), 0, 4),
+    right: new DataView(new ArrayBuffer(6), 2, 2),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `ByteOffset` }],
+        left: 0,
+        right: 2,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `ByteLength` }],
+        left: 4,
+        right: 2,
+      },
+      {
+        kind: `value`,
+        path: [
+          { kind: `internal-slot`, slot: `ViewedArrayBuffer` },
+          { kind: `internal-slot`, slot: `ArrayBufferByteLength` },
+        ],
+        left: 4,
+        right: 6,
+      },
+      {
+        kind: `value`,
+        path: [
+          { kind: `internal-slot`, slot: `ViewedArrayBuffer` },
+          { kind: `internal-slot`, slot: `ArrayBufferMaxByteLength` },
+        ],
+        left: 4,
+        right: 6,
+      },
+      {
+        kind: `key`,
+        path: [
+          { kind: `internal-slot`, slot: `ViewedArrayBuffer` },
+          { kind: `internal-slot`, slot: `ArrayBufferData` },
+        ],
+        index: 4,
+        left: `length`,
+        right: 4,
+      },
+      {
+        kind: `key`,
+        path: [
+          { kind: `internal-slot`, slot: `ViewedArrayBuffer` },
+          { kind: `internal-slot`, slot: `ArrayBufferData` },
+        ],
+        index: 5,
+        left: undefined,
+        right: 5,
+      },
+      {
+        kind: `key`,
+        path: [
+          { kind: `internal-slot`, slot: `ViewedArrayBuffer` },
+          { kind: `internal-slot`, slot: `ArrayBufferData` },
+        ],
+        index: 6,
+        left: undefined,
+        right: `length`,
+      },
+    ],
   },
 
   // Temporal.Duration
