@@ -668,6 +668,921 @@ const cases: Case[] = [
     right: new DataView(new ArrayBuffer(4)),
     diffs: [],
   },
+
+  // Temporal.Duration
+  {
+    name: `equal Durations`,
+    left: new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    right: new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    diffs: [],
+  },
+  {
+    name: `non-equal Duration years`,
+    left: new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    right: new Temporal.Duration(2, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Years` }],
+        left: 1,
+        right: 2,
+      },
+    ],
+  },
+  {
+    name: `non-equal Duration months`,
+    left: new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    right: new Temporal.Duration(1, 3, 3, 4, 5, 6, 7, 8, 9, 10),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Months` }],
+        left: 2,
+        right: 3,
+      },
+    ],
+  },
+  {
+    name: `non-equal Duration weeks`,
+    left: new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    right: new Temporal.Duration(1, 2, 4, 4, 5, 6, 7, 8, 9, 10),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Weeks` }],
+        left: 3,
+        right: 4,
+      },
+    ],
+  },
+  {
+    name: `non-equal Duration days`,
+    left: new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    right: new Temporal.Duration(1, 2, 3, 5, 5, 6, 7, 8, 9, 10),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Days` }],
+        left: 4,
+        right: 5,
+      },
+    ],
+  },
+  {
+    name: `non-equal Duration hours`,
+    left: new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    right: new Temporal.Duration(1, 2, 3, 4, 6, 6, 7, 8, 9, 10),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Hours` }],
+        left: 5,
+        right: 6,
+      },
+    ],
+  },
+  {
+    name: `non-equal Duration minutes`,
+    left: new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    right: new Temporal.Duration(1, 2, 3, 4, 5, 7, 7, 8, 9, 10),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Minutes` }],
+        left: 6,
+        right: 7,
+      },
+    ],
+  },
+  {
+    name: `non-equal Duration seconds`,
+    left: new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    right: new Temporal.Duration(1, 2, 3, 4, 5, 6, 8, 8, 9, 10),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Seconds` }],
+        left: 7,
+        right: 8,
+      },
+    ],
+  },
+  {
+    name: `non-equal Duration milliseconds`,
+    left: new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    right: new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 9, 9, 10),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Milliseconds` }],
+        left: 8,
+        right: 9,
+      },
+    ],
+  },
+  {
+    name: `non-equal Duration microseconds`,
+    left: new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    right: new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 10, 10),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Microseconds` }],
+        left: 9,
+        right: 10,
+      },
+    ],
+  },
+  {
+    name: `non-equal Duration nanoseconds`,
+    left: new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    right: new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 11),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Nanoseconds` }],
+        left: 10,
+        right: 11,
+      },
+    ],
+  },
+  {
+    name: `non-equal Durations`,
+    left: new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    right: new Temporal.Duration(),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Years` }],
+        left: 1,
+        right: 0,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Months` }],
+        left: 2,
+        right: 0,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Weeks` }],
+        left: 3,
+        right: 0,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Days` }],
+        left: 4,
+        right: 0,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Hours` }],
+        left: 5,
+        right: 0,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Minutes` }],
+        left: 6,
+        right: 0,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Seconds` }],
+        left: 7,
+        right: 0,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Milliseconds` }],
+        left: 8,
+        right: 0,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Microseconds` }],
+        left: 9,
+        right: 0,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Nanoseconds` }],
+        left: 10,
+        right: 0,
+      },
+    ],
+  },
+
+  // Temporal.Instant
+  {
+    name: `equal Instants`,
+    left: new Temporal.Instant(1_000_000n),
+    right: new Temporal.Instant(1_000_000n),
+    diffs: [],
+  },
+  {
+    name: `non-equal Instant epochNanoseconds`,
+    left: new Temporal.Instant(1_000_000n),
+    right: new Temporal.Instant(2_000_000n),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `EpochNanoseconds` }],
+        left: 1_000_000n,
+        right: 2_000_000n,
+      },
+    ],
+  },
+
+  // Temporal.PlainDate
+  {
+    name: `equal PlainDates`,
+    left: new Temporal.PlainDate(2024, 1, 15),
+    right: new Temporal.PlainDate(2024, 1, 15),
+    diffs: [],
+  },
+  {
+    name: `non-equal PlainDate calendar`,
+    left: new Temporal.PlainDate(2024, 1, 15, `iso8601`),
+    right: new Temporal.PlainDate(2024, 1, 15, `gregory`),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Calendar` }],
+        left: `iso8601`,
+        right: `gregory`,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainDate year`,
+    left: new Temporal.PlainDate(2024, 1, 15),
+    right: new Temporal.PlainDate(2025, 1, 15),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Year` }],
+        left: 2024,
+        right: 2025,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainDate month`,
+    left: new Temporal.PlainDate(2024, 1, 15),
+    right: new Temporal.PlainDate(2024, 2, 15),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Month` }],
+        left: 1,
+        right: 2,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainDate day`,
+    left: new Temporal.PlainDate(2024, 1, 15),
+    right: new Temporal.PlainDate(2024, 1, 16),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Day` }],
+        left: 15,
+        right: 16,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainDates`,
+    left: new Temporal.PlainDate(2024, 1, 15, `iso8601`),
+    right: new Temporal.PlainDate(2025, 2, 16, `gregory`),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Calendar` }],
+        left: `iso8601`,
+        right: `gregory`,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Year` }],
+        left: 2024,
+        right: 2025,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Month` }],
+        left: 1,
+        right: 2,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Day` }],
+        left: 15,
+        right: 16,
+      },
+    ],
+  },
+
+  // Temporal.PlainDateTime
+  {
+    name: `equal PlainDateTimes`,
+    left: new Temporal.PlainDateTime(2024, 1, 15, 10, 30, 0, 0, 0, 0),
+    right: new Temporal.PlainDateTime(2024, 1, 15, 10, 30, 0, 0, 0, 0),
+    diffs: [],
+  },
+  {
+    name: `non-equal PlainDateTime calendar`,
+    left: new Temporal.PlainDateTime(
+      2024,
+      1,
+      15,
+      10,
+      30,
+      0,
+      0,
+      0,
+      0,
+      `iso8601`,
+    ),
+    right: new Temporal.PlainDateTime(
+      2024,
+      1,
+      15,
+      10,
+      30,
+      0,
+      0,
+      0,
+      0,
+      `gregory`,
+    ),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Calendar` }],
+        left: `iso8601`,
+        right: `gregory`,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainDateTime year`,
+    left: new Temporal.PlainDateTime(2024, 1, 15, 10, 30, 0, 0, 0, 0),
+    right: new Temporal.PlainDateTime(2025, 1, 15, 10, 30, 0, 0, 0, 0),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Year` }],
+        left: 2024,
+        right: 2025,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainDateTime month`,
+    left: new Temporal.PlainDateTime(2024, 1, 15, 10, 30, 0, 0, 0, 0),
+    right: new Temporal.PlainDateTime(2024, 2, 15, 10, 30, 0, 0, 0, 0),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Month` }],
+        left: 1,
+        right: 2,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainDateTime day`,
+    left: new Temporal.PlainDateTime(2024, 1, 15, 10, 30, 0, 0, 0, 0),
+    right: new Temporal.PlainDateTime(2024, 1, 16, 10, 30, 0, 0, 0, 0),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Day` }],
+        left: 15,
+        right: 16,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainDateTime hour`,
+    left: new Temporal.PlainDateTime(2024, 1, 15, 10, 30, 0, 0, 0, 0),
+    right: new Temporal.PlainDateTime(2024, 1, 15, 11, 30, 0, 0, 0, 0),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Hour` }],
+        left: 10,
+        right: 11,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainDateTime minute`,
+    left: new Temporal.PlainDateTime(2024, 1, 15, 10, 30, 0, 0, 0, 0),
+    right: new Temporal.PlainDateTime(2024, 1, 15, 10, 31, 0, 0, 0, 0),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Minute` }],
+        left: 30,
+        right: 31,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainDateTime second`,
+    left: new Temporal.PlainDateTime(2024, 1, 15, 10, 30, 0, 0, 0, 0),
+    right: new Temporal.PlainDateTime(2024, 1, 15, 10, 30, 1, 0, 0, 0),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Second` }],
+        left: 0,
+        right: 1,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainDateTime millisecond`,
+    left: new Temporal.PlainDateTime(2024, 1, 15, 10, 30, 0, 0, 0, 0),
+    right: new Temporal.PlainDateTime(2024, 1, 15, 10, 30, 0, 1, 0, 0),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Millisecond` }],
+        left: 0,
+        right: 1,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainDateTime microsecond`,
+    left: new Temporal.PlainDateTime(2024, 1, 15, 10, 30, 0, 0, 0, 0),
+    right: new Temporal.PlainDateTime(2024, 1, 15, 10, 30, 0, 0, 1, 0),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Microsecond` }],
+        left: 0,
+        right: 1,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainDateTime nanosecond`,
+    left: new Temporal.PlainDateTime(2024, 1, 15, 10, 30, 0, 0, 0, 0),
+    right: new Temporal.PlainDateTime(2024, 1, 15, 10, 30, 0, 0, 0, 1),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Nanosecond` }],
+        left: 0,
+        right: 1,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainDateTimes`,
+    left: new Temporal.PlainDateTime(
+      2024,
+      1,
+      15,
+      10,
+      30,
+      0,
+      0,
+      0,
+      0,
+      `iso8601`,
+    ),
+    right: new Temporal.PlainDateTime(
+      2025,
+      2,
+      16,
+      11,
+      31,
+      1,
+      1,
+      1,
+      1,
+      `gregory`,
+    ),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Calendar` }],
+        left: `iso8601`,
+        right: `gregory`,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Year` }],
+        left: 2024,
+        right: 2025,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Month` }],
+        left: 1,
+        right: 2,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Day` }],
+        left: 15,
+        right: 16,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Hour` }],
+        left: 10,
+        right: 11,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Minute` }],
+        left: 30,
+        right: 31,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Second` }],
+        left: 0,
+        right: 1,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Millisecond` }],
+        left: 0,
+        right: 1,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Microsecond` }],
+        left: 0,
+        right: 1,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Nanosecond` }],
+        left: 0,
+        right: 1,
+      },
+    ],
+  },
+
+  // Temporal.PlainMonthDay
+  {
+    name: `equal PlainMonthDays`,
+    left: new Temporal.PlainMonthDay(3, 14),
+    right: new Temporal.PlainMonthDay(3, 14),
+    diffs: [],
+  },
+  {
+    name: `non-equal PlainMonthDay calendar`,
+    left: new Temporal.PlainMonthDay(3, 14, `iso8601`),
+    right: new Temporal.PlainMonthDay(3, 14, `gregory`),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Calendar` }],
+        left: `iso8601`,
+        right: `gregory`,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainMonthDay monthCode`,
+    left: new Temporal.PlainMonthDay(3, 14),
+    right: new Temporal.PlainMonthDay(4, 14),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `MonthCode` }],
+        left: `M03`,
+        right: `M04`,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainMonthDay day`,
+    left: new Temporal.PlainMonthDay(3, 14),
+    right: new Temporal.PlainMonthDay(3, 15),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Day` }],
+        left: 14,
+        right: 15,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainMonthDays`,
+    left: new Temporal.PlainMonthDay(3, 14, `iso8601`),
+    right: new Temporal.PlainMonthDay(4, 15, `gregory`),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Calendar` }],
+        left: `iso8601`,
+        right: `gregory`,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `MonthCode` }],
+        left: `M03`,
+        right: `M04`,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Day` }],
+        left: 14,
+        right: 15,
+      },
+    ],
+  },
+
+  // Temporal.PlainTime
+  {
+    name: `equal PlainTimes`,
+    left: new Temporal.PlainTime(10, 30, 0, 0, 0, 0),
+    right: new Temporal.PlainTime(10, 30, 0, 0, 0, 0),
+    diffs: [],
+  },
+  {
+    name: `non-equal PlainTime hour`,
+    left: new Temporal.PlainTime(10, 30, 0, 0, 0, 0),
+    right: new Temporal.PlainTime(11, 30, 0, 0, 0, 0),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Hour` }],
+        left: 10,
+        right: 11,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainTime minute`,
+    left: new Temporal.PlainTime(10, 30, 0, 0, 0, 0),
+    right: new Temporal.PlainTime(10, 31, 0, 0, 0, 0),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Minute` }],
+        left: 30,
+        right: 31,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainTime second`,
+    left: new Temporal.PlainTime(10, 30, 0, 0, 0, 0),
+    right: new Temporal.PlainTime(10, 30, 1, 0, 0, 0),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Second` }],
+        left: 0,
+        right: 1,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainTime millisecond`,
+    left: new Temporal.PlainTime(10, 30, 0, 0, 0, 0),
+    right: new Temporal.PlainTime(10, 30, 0, 1, 0, 0),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Millisecond` }],
+        left: 0,
+        right: 1,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainTime microsecond`,
+    left: new Temporal.PlainTime(10, 30, 0, 0, 0, 0),
+    right: new Temporal.PlainTime(10, 30, 0, 0, 1, 0),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Microsecond` }],
+        left: 0,
+        right: 1,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainTime nanosecond`,
+    left: new Temporal.PlainTime(10, 30, 0, 0, 0, 0),
+    right: new Temporal.PlainTime(10, 30, 0, 0, 0, 1),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Nanosecond` }],
+        left: 0,
+        right: 1,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainTimes`,
+    left: new Temporal.PlainTime(10, 30, 0, 0, 0, 0),
+    right: new Temporal.PlainTime(11, 31, 1, 1, 1, 1),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Hour` }],
+        left: 10,
+        right: 11,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Minute` }],
+        left: 30,
+        right: 31,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Second` }],
+        left: 0,
+        right: 1,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Millisecond` }],
+        left: 0,
+        right: 1,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Microsecond` }],
+        left: 0,
+        right: 1,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Nanosecond` }],
+        left: 0,
+        right: 1,
+      },
+    ],
+  },
+
+  // Temporal.PlainYearMonth
+  {
+    name: `equal PlainYearMonths`,
+    left: new Temporal.PlainYearMonth(2024, 3),
+    right: new Temporal.PlainYearMonth(2024, 3),
+    diffs: [],
+  },
+  {
+    name: `non-equal PlainYearMonth calendar`,
+    left: new Temporal.PlainYearMonth(2024, 3, `iso8601`),
+    right: new Temporal.PlainYearMonth(2024, 3, `gregory`),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Calendar` }],
+        left: `iso8601`,
+        right: `gregory`,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainYearMonth year`,
+    left: new Temporal.PlainYearMonth(2024, 3),
+    right: new Temporal.PlainYearMonth(2025, 3),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Year` }],
+        left: 2024,
+        right: 2025,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainYearMonth month`,
+    left: new Temporal.PlainYearMonth(2024, 3),
+    right: new Temporal.PlainYearMonth(2024, 4),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Month` }],
+        left: 3,
+        right: 4,
+      },
+    ],
+  },
+  {
+    name: `non-equal PlainYearMonths`,
+    left: new Temporal.PlainYearMonth(2024, 3, `iso8601`),
+    right: new Temporal.PlainYearMonth(2025, 4, `gregory`),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Calendar` }],
+        left: `iso8601`,
+        right: `gregory`,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Year` }],
+        left: 2024,
+        right: 2025,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Month` }],
+        left: 3,
+        right: 4,
+      },
+    ],
+  },
+
+  // Temporal.ZonedDateTime
+  {
+    name: `equal ZonedDateTimes`,
+    left: new Temporal.ZonedDateTime(0n, `UTC`),
+    right: new Temporal.ZonedDateTime(0n, `UTC`),
+    diffs: [],
+  },
+  {
+    name: `non-equal ZonedDateTime calendar`,
+    left: new Temporal.ZonedDateTime(0n, `UTC`, `iso8601`),
+    right: new Temporal.ZonedDateTime(0n, `UTC`, `gregory`),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Calendar` }],
+        left: `iso8601`,
+        right: `gregory`,
+      },
+    ],
+  },
+  {
+    name: `non-equal ZonedDateTime time zone`,
+    left: new Temporal.ZonedDateTime(0n, `UTC`),
+    right: new Temporal.ZonedDateTime(0n, `America/New_York`),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `TimeZone` }],
+        left: `UTC`,
+        right: `America/New_York`,
+      },
+    ],
+  },
+  {
+    name: `non-equal ZonedDateTime epochNanoseconds`,
+    left: new Temporal.ZonedDateTime(0n, `UTC`),
+    right: new Temporal.ZonedDateTime(1_000_000n, `UTC`),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `EpochNanoseconds` }],
+        left: 0n,
+        right: 1_000_000n,
+      },
+    ],
+  },
+  {
+    name: `non-equal ZonedDateTimes`,
+    left: new Temporal.ZonedDateTime(0n, `UTC`, `iso8601`),
+    right: new Temporal.ZonedDateTime(
+      1_000_000n,
+      `America/New_York`,
+      `gregory`,
+    ),
+    diffs: [
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `Calendar` }],
+        left: `iso8601`,
+        right: `gregory`,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `TimeZone` }],
+        left: `UTC`,
+        right: `America/New_York`,
+      },
+      {
+        kind: `value`,
+        path: [{ kind: `internal-slot`, slot: `EpochNanoseconds` }],
+        left: 0n,
+        right: 1_000_000n,
+      },
+    ],
+  },
 ]
 
 test.each(cases)(`$name`, ({ left, right, diffs }) => {

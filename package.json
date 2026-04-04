@@ -43,8 +43,12 @@
     "prepublishOnly": "pnpm build"
   },
   "prettier": "@tomer/prettier-config",
+  "dependencies": {
+    "builtin-type": "^0.0.4"
+  },
   "devDependencies": {
     "@fast-check/vitest": "^0.3.0",
+    "@js-temporal/polyfill": "^0.5.1",
     "@rollup/plugin-terser": "^1.0.0",
     "@tomer/eslint-config": "^4.6.1",
     "@tomer/prettier-config": "^4.0.0",
@@ -55,10 +59,7 @@
     "publint": "^0.3.18",
     "rollup-plugin-tree-shakeable": "^2.0.0",
     "tsdown": "^0.21.3",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.2",
     "vitest": "^4.0.18"
-  },
-  "dependencies": {
-    "builtin-type": "^0.0.4"
   }
 }
