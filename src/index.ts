@@ -281,6 +281,8 @@ const getInternalSlots = (
     case `GeneratorFunction`:
     case `AsyncFunction`:
     case `AsyncGeneratorFunction`:
+      // https://tc39.es/ecma262/#sec-function.prototype.tostring
+      slots.SourceText = Function.prototype.toString.call(value)
       break
     case `Promise`:
       break

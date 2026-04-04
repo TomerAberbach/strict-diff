@@ -397,6 +397,146 @@ const cases: Case[] = [
     const [left, right] = [() => {}, () => {}]
     return { name: `equal anonymous functions`, left, right, diffs: [] }
   })(),
+  (() => {
+    const [left, right] = [() => 1, () => 2]
+    return {
+      name: `functions with different bodies`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `SourceText` }],
+          left: `() => 1`,
+          right: `() => 2`,
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const [left, right] = [function* () {}, function* () {}]
+    return { name: `equal generator functions`, left, right, diffs: [] }
+  })(),
+  (() => {
+    const [left, right] = [
+      function* () {
+        yield 1
+      },
+      function* () {
+        yield 2
+      },
+    ]
+    return {
+      name: `generator functions with different bodies`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `SourceText` }],
+          left: `function* () {\n        yield 1;\n      }`,
+          right: `function* () {\n        yield 2;\n      }`,
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const [left, right] = [async () => {}, async () => {}]
+    return { name: `equal async functions`, left, right, diffs: [] }
+  })(),
+  (() => {
+    const [left, right] = [async () => 1, async () => 2]
+    return {
+      name: `async functions with different bodies`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `SourceText` }],
+          left: `async () => 1`,
+          right: `async () => 2`,
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const foo = () => {}
+    const bar = () => {}
+    return {
+      name: `functions with different names`,
+      left: foo,
+      right: bar,
+      diffs: [
+        {
+          kind: `value`,
+          path: [
+            { kind: `property`, index: 1, key: `name` },
+            { kind: `internal-slot`, slot: `Value` },
+          ],
+          left: `foo`,
+          right: `bar`,
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const [left, right] = [
+      (_a: unknown) => {},
+      (_a: unknown, _b: unknown) => {},
+    ]
+    return {
+      name: `functions with different lengths`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `SourceText` }],
+          left: `(_a) => {\n      }`,
+          right: `(_a, _b) => {\n      }`,
+        },
+        {
+          kind: `value`,
+          path: [
+            { kind: `property`, index: 0, key: `length` },
+            { kind: `internal-slot`, slot: `Value` },
+          ],
+          left: 1,
+          right: 2,
+        },
+      ],
+    }
+  })(),
+  {
+    name: `async function vs non-async function`,
+    left: async () => {},
+    right: () => {},
+    diffs: [
+      { kind: `type`, path: [], left: `AsyncFunction`, right: `Function` },
+    ],
+  },
+  {
+    name: `generator function vs non-generator function`,
+    *left() {},
+    right: () => {},
+    diffs: [
+      { kind: `type`, path: [], left: `GeneratorFunction`, right: `Function` },
+    ],
+  },
+  {
+    name: `async generator function vs async function`,
+    async *left() {},
+    right: async () => {},
+    diffs: [
+      {
+        kind: `type`,
+        path: [],
+        left: `AsyncGeneratorFunction`,
+        right: `AsyncFunction`,
+      },
+    ],
+  },
 
   // Promise
   {
