@@ -6,8 +6,17 @@
     "email": "tomer@aberba.ch",
     "url": "https://tomeraberba.ch"
   },
-  "description": "A solid module.",
-  "keywords": [],
+  "description": "Find any observable difference between two values.",
+  "keywords": [
+    "deep",
+    "diff",
+    "difference",
+    "equal",
+    "equals",
+    "equivalent",
+    "object",
+    "strict"
+  ],
   "homepage": "https://github.com/TomerAberbach/strict-diff",
   "repository": "TomerAberbach/strict-diff",
   "bugs": {

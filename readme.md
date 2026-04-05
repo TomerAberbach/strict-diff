@@ -21,14 +21,14 @@
 </div>
 
 <div align="center">
-  A solid module.
+  Find any observable difference between two values.
 </div>
 
 ## Features
 
-- **Wow:** so amazing
-- **Amazing:** so wow
-- **Fancy:** has a tie and everything
+- **Strict:** Finds the most minuscule differences between values.
+- **Structured:** Each diff has a structured path to the diff
+- **Lazy:** Returns a lazy iterable over the diffs
 
 ## Install
 
@@ -41,9 +41,68 @@ $ npm i strict-diff
 ```js
 import strictDiff from 'strict-diff'
 
-console.log(strictDiff())
-//=> Hello World!
+// Primitive value diff
+console.log([...strictDiff(1, 2)])
+//=> [{ kind: 'value', path: [], left: 1, right: 2 }]
+
+// Type diff
+console.log([...strictDiff(null, undefined)])
+//=> [{ kind: 'type', path: [], left: 'null', right: 'undefined' }]
+
+// Object property value diff
+console.log([...strictDiff({ a: 1 }, { a: 2 })])
+//=> [
+//     {
+//       kind: 'value',
+//       path: [
+//         { kind: 'property', index: 0, key: 'a' },
+//         { kind: 'internal-slot', slot: 'Value' },
+//       ],
+//       left: 1,
+//       right: 2,
+//     },
+//   ]
+
+// Object key diff
+console.log([...strictDiff({ a: 1 }, { b: 1 })])
+//=> [{ kind: 'key', path: [], index: 0, left: 'a', right: 'b' }]
+
+// Property descriptor diff (non-writable vs writable)
+const left = Object.defineProperty({}, `a`, {
+  value: 1,
+  writable: false,
+  enumerable: true,
+  configurable: true,
+})
+console.log([...strictDiff(left, { a: 1 })])
+//=> [
+//     {
+//       kind: 'value',
+//       path: [
+//         { kind: 'property', index: 0, key: 'a' },
+//         { kind: 'internal-slot', slot: 'Writable' },
+//       ],
+//       left: false,
+//       right: true,
+//     },
+//   ]
+
+// Lazily iterated
+const diffs = strictDiff({ a: 1, b: 2 }, { a: 99, b: 99 })
+const [firstDiff] = diffs
+console.log(firstDiff)
+//=> {
+//     kind: 'value',
+//     path: [
+//       { kind: 'property', index: 0, key: 'a' },
+//       { kind: 'internal-slot', slot: 'Value' },
+//     ],
+//     left: 1,
+//     right: 99,
+//   }
 ```
+
+See [the tests](./src/index.test.ts) for other example diffs.
 
 ## Contributing
 
