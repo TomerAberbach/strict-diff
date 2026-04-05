@@ -1509,35 +1509,6 @@ const cases: Case[] = [
       },
     ],
   },
-  (() => {
-    const left = new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-    const right = new Temporal.Duration(2, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-    Object.defineProperty(left, `years`, {
-      value: 2,
-      configurable: true,
-      writable: true,
-      enumerable: true,
-    })
-    Object.defineProperty(right, `years`, {
-      value: 2,
-      configurable: true,
-      writable: true,
-      enumerable: true,
-    })
-    return {
-      name: `non-equal Duration years with shadowed years getter`,
-      left,
-      right,
-      diffs: [
-        {
-          kind: `value`,
-          path: [{ kind: `internal-slot`, slot: `Years` }],
-          left: 1,
-          right: 2,
-        },
-      ],
-    }
-  })(),
   {
     name: `non-equal Duration months`,
     left: new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
@@ -1722,6 +1693,296 @@ const cases: Case[] = [
       },
     ],
   },
+  (() => {
+    const left = new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    const right = new Temporal.Duration(2, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    Object.defineProperty(left, `years`, {
+      value: 2,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    Object.defineProperty(right, `years`, {
+      value: 2,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    return {
+      name: `non-equal Duration years with shadowed years getter`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `Years` }],
+          left: 1,
+          right: 2,
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const left = new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    const right = new Temporal.Duration(1, 3, 3, 4, 5, 6, 7, 8, 9, 10)
+    Object.defineProperty(left, `months`, {
+      value: 3,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    Object.defineProperty(right, `months`, {
+      value: 3,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    return {
+      name: `non-equal Duration months with shadowed months getter`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `Months` }],
+          left: 2,
+          right: 3,
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const left = new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    const right = new Temporal.Duration(1, 2, 4, 4, 5, 6, 7, 8, 9, 10)
+    Object.defineProperty(left, `weeks`, {
+      value: 4,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    Object.defineProperty(right, `weeks`, {
+      value: 4,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    return {
+      name: `non-equal Duration weeks with shadowed weeks getter`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `Weeks` }],
+          left: 3,
+          right: 4,
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const left = new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    const right = new Temporal.Duration(1, 2, 3, 5, 5, 6, 7, 8, 9, 10)
+    Object.defineProperty(left, `days`, {
+      value: 5,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    Object.defineProperty(right, `days`, {
+      value: 5,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    return {
+      name: `non-equal Duration days with shadowed days getter`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `Days` }],
+          left: 4,
+          right: 5,
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const left = new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    const right = new Temporal.Duration(1, 2, 3, 4, 6, 6, 7, 8, 9, 10)
+    Object.defineProperty(left, `hours`, {
+      value: 6,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    Object.defineProperty(right, `hours`, {
+      value: 6,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    return {
+      name: `non-equal Duration hours with shadowed hours getter`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `Hours` }],
+          left: 5,
+          right: 6,
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const left = new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    const right = new Temporal.Duration(1, 2, 3, 4, 5, 7, 7, 8, 9, 10)
+    Object.defineProperty(left, `minutes`, {
+      value: 7,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    Object.defineProperty(right, `minutes`, {
+      value: 7,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    return {
+      name: `non-equal Duration minutes with shadowed minutes getter`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `Minutes` }],
+          left: 6,
+          right: 7,
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const left = new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    const right = new Temporal.Duration(1, 2, 3, 4, 5, 6, 8, 8, 9, 10)
+    Object.defineProperty(left, `seconds`, {
+      value: 8,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    Object.defineProperty(right, `seconds`, {
+      value: 8,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    return {
+      name: `non-equal Duration seconds with shadowed seconds getter`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `Seconds` }],
+          left: 7,
+          right: 8,
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const left = new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    const right = new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 9, 9, 10)
+    Object.defineProperty(left, `milliseconds`, {
+      value: 9,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    Object.defineProperty(right, `milliseconds`, {
+      value: 9,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    return {
+      name: `non-equal Duration milliseconds with shadowed milliseconds getter`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `Milliseconds` }],
+          left: 8,
+          right: 9,
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const left = new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    const right = new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 10, 10)
+    Object.defineProperty(left, `microseconds`, {
+      value: 10,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    Object.defineProperty(right, `microseconds`, {
+      value: 10,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    return {
+      name: `non-equal Duration microseconds with shadowed microseconds getter`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `Microseconds` }],
+          left: 9,
+          right: 10,
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const left = new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    const right = new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 11)
+    Object.defineProperty(left, `nanoseconds`, {
+      value: 11,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    Object.defineProperty(right, `nanoseconds`, {
+      value: 11,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    return {
+      name: `non-equal Duration nanoseconds with shadowed nanoseconds getter`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `Nanoseconds` }],
+          left: 10,
+          right: 11,
+        },
+      ],
+    }
+  })(),
 
   // Temporal.Instant
   {
