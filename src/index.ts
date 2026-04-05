@@ -459,7 +459,7 @@ const accessGetter = (
       return descriptor.get!.call(value)
     }
   }
-  throw new Error(`No getter found for ${key}`)
+  return undefined
 }
 
 function* enumerateOwnPropertyDiffs(
