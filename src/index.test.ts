@@ -97,6 +97,86 @@ const cases: Case[] = [
     diffs: [{ kind: `key`, path: [], index: 0, left: undefined, right: `a` }],
   },
   {
+    name: `non-equal objects with valid array index key`,
+    left: { 0: 1 },
+    right: { 0: 2 },
+    diffs: [
+      {
+        kind: `value`,
+        path: [
+          { kind: `property`, index: 0, key: 0 },
+          { kind: `internal-slot`, slot: `Value` },
+        ],
+        left: 1,
+        right: 2,
+      },
+    ],
+  },
+  {
+    name: `non-equal objects with non-integer string key`,
+    left: { 1.5: 1 },
+    right: { 1.5: 2 },
+    diffs: [
+      {
+        kind: `value`,
+        path: [
+          { kind: `property`, index: 0, key: `1.5` },
+          { kind: `internal-slot`, slot: `Value` },
+        ],
+        left: 1,
+        right: 2,
+      },
+    ],
+  },
+  {
+    name: `non-equal objects with negative integer string key`,
+    left: { '-1': 1 },
+    right: { '-1': 2 },
+    diffs: [
+      {
+        kind: `value`,
+        path: [
+          { kind: `property`, index: 0, key: `-1` },
+          { kind: `internal-slot`, slot: `Value` },
+        ],
+        left: 1,
+        right: 2,
+      },
+    ],
+  },
+  {
+    name: `non-equal objects with out-of-range index string key`,
+    left: { 4_294_967_295: 1 },
+    right: { 4_294_967_295: 2 },
+    diffs: [
+      {
+        kind: `value`,
+        path: [
+          { kind: `property`, index: 0, key: `4294967295` },
+          { kind: `internal-slot`, slot: `Value` },
+        ],
+        left: 1,
+        right: 2,
+      },
+    ],
+  },
+  {
+    name: `non-equal objects with non-canonical integer string key`,
+    left: { [`01`]: 1 },
+    right: { [`01`]: 2 },
+    diffs: [
+      {
+        kind: `value`,
+        path: [
+          { kind: `property`, index: 0, key: `01` },
+          { kind: `internal-slot`, slot: `Value` },
+        ],
+        left: 1,
+        right: 2,
+      },
+    ],
+  },
+  {
     name: `non-equal objects with non-writable vs writable property`,
     left: Object.defineProperty({}, `a`, {
       value: 1,
@@ -111,6 +191,48 @@ const cases: Case[] = [
         path: [
           { kind: `property`, index: 0, key: `a` },
           { kind: `internal-slot`, slot: `Writable` },
+        ],
+        left: false,
+        right: true,
+      },
+    ],
+  },
+  {
+    name: `non-equal objects with non-enumerable vs enumerable property`,
+    left: Object.defineProperty({}, `a`, {
+      value: 1,
+      writable: true,
+      enumerable: false,
+      configurable: true,
+    }),
+    right: { a: 1 },
+    diffs: [
+      {
+        kind: `value`,
+        path: [
+          { kind: `property`, index: 0, key: `a` },
+          { kind: `internal-slot`, slot: `Enumerable` },
+        ],
+        left: false,
+        right: true,
+      },
+    ],
+  },
+  {
+    name: `non-equal objects with non-configurable vs configurable property`,
+    left: Object.defineProperty({}, `a`, {
+      value: 1,
+      writable: true,
+      enumerable: true,
+      configurable: false,
+    }),
+    right: { a: 1 },
+    diffs: [
+      {
+        kind: `value`,
+        path: [
+          { kind: `property`, index: 0, key: `a` },
+          { kind: `internal-slot`, slot: `Configurable` },
         ],
         left: false,
         right: true,
@@ -247,6 +369,103 @@ const cases: Case[] = [
           path: yValuePath,
           leftFirstSeenPath: xValuePath,
           rightFirstSeenPath: undefined,
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const leftShared = {}
+    const rightShared = {}
+    const left = { a: leftShared, b: { x: {} }, c: leftShared }
+    const right = { a: {}, b: { x: rightShared }, c: rightShared }
+    return {
+      name: `non-equal references with first-seen paths of different lengths`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `reference` as const,
+          path: [
+            { kind: `property` as const, index: 2, key: `c` },
+            { kind: `internal-slot` as const, slot: `Value` },
+          ],
+          leftFirstSeenPath: [
+            { kind: `property` as const, index: 0, key: `a` },
+            { kind: `internal-slot` as const, slot: `Value` },
+          ],
+          rightFirstSeenPath: [
+            { kind: `property` as const, index: 1, key: `b` },
+            { kind: `internal-slot` as const, slot: `Value` },
+            { kind: `property` as const, index: 0, key: `x` },
+            { kind: `internal-slot` as const, slot: `Value` },
+          ],
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const leftShared = {}
+    const rightShared = {}
+    const left = { a: { a: leftShared, b: {} }, c: leftShared }
+    const right = { a: { a: {}, b: rightShared }, c: rightShared }
+    return {
+      name: `non-equal references with equal-length paths sharing a common internal-slot prefix`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `reference` as const,
+          path: [
+            { kind: `property` as const, index: 1, key: `c` },
+            { kind: `internal-slot` as const, slot: `Value` },
+          ],
+          leftFirstSeenPath: [
+            { kind: `property` as const, index: 0, key: `a` },
+            { kind: `internal-slot` as const, slot: `Value` },
+            { kind: `property` as const, index: 0, key: `a` },
+            { kind: `internal-slot` as const, slot: `Value` },
+          ],
+          rightFirstSeenPath: [
+            { kind: `property` as const, index: 0, key: `a` },
+            { kind: `internal-slot` as const, slot: `Value` },
+            { kind: `property` as const, index: 1, key: `b` },
+            { kind: `internal-slot` as const, slot: `Value` },
+          ],
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const leftShared = {}
+    const rightShared = {}
+    const leftGrandProto = {}
+    const rightProto = Object.create(rightShared) as object
+    const leftProto = Object.create(leftGrandProto) as object
+    const left = Object.create(leftProto) as Record<string, unknown>
+    left.a = leftShared
+    left.b = leftShared
+    const right = Object.create(rightProto) as Record<string, unknown>
+    right.a = {}
+    right.b = rightShared
+    return {
+      name: `non-equal references where first-seen paths have different segment kinds`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `reference` as const,
+          path: [
+            { kind: `property` as const, index: 1, key: `b` },
+            { kind: `internal-slot` as const, slot: `Value` },
+          ],
+          leftFirstSeenPath: [
+            { kind: `property` as const, index: 0, key: `a` },
+            { kind: `internal-slot` as const, slot: `Value` },
+          ],
+          rightFirstSeenPath: [
+            { kind: `internal-slot` as const, slot: `Prototype` },
+            { kind: `internal-slot` as const, slot: `Prototype` },
+          ],
         },
       ],
     }
