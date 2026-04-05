@@ -291,6 +291,26 @@ const cases: Case[] = [
       },
     ],
   },
+  (() => {
+    const shadowValueOf = () => false
+    const left = Object(true) as object
+    const right = Object(false) as object
+    left.valueOf = shadowValueOf
+    right.valueOf = shadowValueOf
+    return {
+      name: `non-equal Boolean wrappers with shadowed valueOf`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `BooleanData` }],
+          left: true,
+          right: false,
+        },
+      ],
+    }
+  })(),
 
   // Number wrappers
   {
@@ -312,6 +332,26 @@ const cases: Case[] = [
       },
     ],
   },
+  (() => {
+    const shadowValueOf = () => 42
+    const left = Object(1) as object
+    const right = Object(2) as object
+    left.valueOf = shadowValueOf
+    right.valueOf = shadowValueOf
+    return {
+      name: `non-equal Number wrappers with shadowed valueOf`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `NumberData` }],
+          left: 1,
+          right: 2,
+        },
+      ],
+    }
+  })(),
 
   // BigInt wrappers
   {
@@ -333,6 +373,26 @@ const cases: Case[] = [
       },
     ],
   },
+  (() => {
+    const shadowValueOf = (): bigint => 0n
+    const left = Object(1n) as object
+    const right = Object(2n) as object
+    left.valueOf = shadowValueOf
+    right.valueOf = shadowValueOf
+    return {
+      name: `non-equal BigInt wrappers with shadowed valueOf`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `BigIntData` }],
+          left: 1n,
+          right: 2n,
+        },
+      ],
+    }
+  })(),
 
   // String wrappers
   {
@@ -363,6 +423,35 @@ const cases: Case[] = [
       },
     ],
   },
+  (() => {
+    const shadowValueOf = (): string => `shadow`
+    const left = Object(`a`) as object
+    const right = Object(`b`) as object
+    left.valueOf = shadowValueOf
+    right.valueOf = shadowValueOf
+    return {
+      name: `non-equal String wrappers with shadowed valueOf`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `StringData` }],
+          left: `a`,
+          right: `b`,
+        },
+        {
+          kind: `value`,
+          path: [
+            { kind: `property`, index: 0, key: 0 },
+            { kind: `internal-slot`, slot: `Value` },
+          ],
+          left: `a`,
+          right: `b`,
+        },
+      ],
+    }
+  })(),
 
   // Symbol wrappers
   (() => {
@@ -381,6 +470,29 @@ const cases: Case[] = [
       name: `non-equal Symbol wrappers`,
       left: Object(symbol1),
       right: Object(symbol2),
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `SymbolData` }],
+          left: symbol1,
+          right: symbol2,
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const symbol1 = Symbol(`a`)
+    const symbol2 = Symbol(`b`)
+    const shadowSymbol = Symbol(`shadow`)
+    const shadowValueOf = (): symbol => shadowSymbol
+    const left = Object(symbol1) as object
+    const right = Object(symbol2) as object
+    left.valueOf = shadowValueOf
+    right.valueOf = shadowValueOf
+    return {
+      name: `non-equal Symbol wrappers with shadowed valueOf`,
+      left,
+      right,
       diffs: [
         {
           kind: `value`,
@@ -418,6 +530,33 @@ const cases: Case[] = [
       },
     ],
   },
+  (() => {
+    const shadowEntries = (): MapIterator<[number, string]> =>
+      new Map([[1, `shadow`]]).entries()
+    const left = new Map([[1, `a`]])
+    const right = new Map([[1, `b`]])
+    left.entries = shadowEntries
+    right.entries = shadowEntries
+    return {
+      name: `non-equal Map entry values with shadowed entries`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [
+            { kind: `internal-slot`, slot: `MapData` },
+            { kind: `property`, index: 0, key: 0 },
+            { kind: `internal-slot`, slot: `Value` },
+            { kind: `property`, index: 1, key: 1 },
+            { kind: `internal-slot`, slot: `Value` },
+          ],
+          left: `a`,
+          right: `b`,
+        },
+      ],
+    }
+  })(),
 
   // Set
   {
@@ -443,6 +582,30 @@ const cases: Case[] = [
       },
     ],
   },
+  (() => {
+    const shadowValues = (): SetIterator<number> => new Set([1]).values()
+    const left = new Set([1, 2])
+    const right = new Set([1, 3])
+    left.values = shadowValues
+    right.values = shadowValues
+    return {
+      name: `non-equal Set values with shadowed values`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [
+            { kind: `internal-slot`, slot: `SetData` },
+            { kind: `property`, index: 1, key: 1 },
+            { kind: `internal-slot`, slot: `Value` },
+          ],
+          left: 2,
+          right: 3,
+        },
+      ],
+    }
+  })(),
 
   // Function
   (() => {
@@ -453,6 +616,25 @@ const cases: Case[] = [
     const [left, right] = [() => 1, () => 2]
     return {
       name: `non-equal function bodies`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `SourceText` }],
+          left: `() => 1`,
+          right: `() => 2`,
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const shadowToString = (): string => `shadow`
+    const [left, right] = [() => 1, () => 2]
+    left.toString = shadowToString
+    right.toString = shadowToString
+    return {
+      name: `non-equal function bodies with shadowed toString`,
       left,
       right,
       diffs: [
@@ -605,6 +787,26 @@ const cases: Case[] = [
       },
     ],
   },
+  (() => {
+    const shadowGetTime = (): number => -1
+    const left = new Date(0)
+    const right = new Date(1)
+    left.getTime = shadowGetTime
+    right.getTime = shadowGetTime
+    return {
+      name: `non-equal Date values with shadowed getTime`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `DateValue` }],
+          left: 0,
+          right: 1,
+        },
+      ],
+    }
+  })(),
 
   // RegExp
   { name: `equal RegExps`, left: /foo/g, right: /foo/g, diffs: [] },
@@ -621,6 +823,35 @@ const cases: Case[] = [
       },
     ],
   },
+  (() => {
+    const left = /foo/
+    const right = /bar/
+    Object.defineProperty(left, `source`, {
+      value: `shadow`,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    Object.defineProperty(right, `source`, {
+      value: `shadow`,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    return {
+      name: `non-equal RegExp sources with shadowed source`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `OriginalSource` }],
+          left: `foo`,
+          right: `bar`,
+        },
+      ],
+    }
+  })(),
   {
     name: `non-equal RegExp flags`,
     left: /foo/g,
@@ -634,6 +865,35 @@ const cases: Case[] = [
       },
     ],
   },
+  (() => {
+    const left = /foo/g
+    const right = /foo/i
+    Object.defineProperty(left, `flags`, {
+      value: `shadow`,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    Object.defineProperty(right, `flags`, {
+      value: `shadow`,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    return {
+      name: `non-equal RegExp flags with shadowed flags`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `OriginalFlags` }],
+          left: `g`,
+          right: `i`,
+        },
+      ],
+    }
+  })(),
   {
     name: `non-equal RegExps`,
     left: /foo/g,
@@ -674,6 +934,35 @@ const cases: Case[] = [
       },
     ],
   },
+  (() => {
+    const left = new URL(`https://example.com/a`)
+    const right = new URL(`https://example.com/b`)
+    Object.defineProperty(left, `href`, {
+      value: `shadow`,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    Object.defineProperty(right, `href`, {
+      value: `shadow`,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    return {
+      name: `non-equal URL paths with shadowed href`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `href` }],
+          left: `https://example.com/a`,
+          right: `https://example.com/b`,
+        },
+      ],
+    }
+  })(),
 
   // URLSearchParams
   {
@@ -695,6 +984,26 @@ const cases: Case[] = [
       },
     ],
   },
+  (() => {
+    const shadowToString = (): string => `shadow`
+    const left = new URLSearchParams(`a=1`)
+    const right = new URLSearchParams(`a=2`)
+    left.toString = shadowToString
+    right.toString = shadowToString
+    return {
+      name: `non-equal URLSearchParams values with shadowed toString`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `list` }],
+          left: `a=1`,
+          right: `a=2`,
+        },
+      ],
+    }
+  })(),
 
   // WeakRef
   {
@@ -720,6 +1029,32 @@ const cases: Case[] = [
       },
     ],
   },
+  (() => {
+    const shadowDeref = () => undefined
+    const target1 = { a: 1 }
+    const target2 = { a: 2 }
+    const left = new WeakRef(target1)
+    const right = new WeakRef(target2)
+    left.deref = shadowDeref
+    right.deref = shadowDeref
+    return {
+      name: `non-equal WeakRefs with shadowed deref`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [
+            { kind: `internal-slot`, slot: `WeakRefTarget` },
+            { kind: `property`, index: 0, key: `a` },
+            { kind: `internal-slot`, slot: `Value` },
+          ],
+          left: 1,
+          right: 2,
+        },
+      ],
+    }
+  })(),
 
   // ArrayBuffer
   {
@@ -844,6 +1179,36 @@ const cases: Case[] = [
       name: `non-equal Uint8Array byteOffsets`,
       left: new Uint8Array(buf, 0, 4),
       right: new Uint8Array(buf, 4, 4),
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `ByteOffset` }],
+          left: 0,
+          right: 4,
+        },
+      ],
+    }
+  })(),
+  (() => {
+    const buf = new ArrayBuffer(8)
+    const left = new Uint8Array(buf, 0, 4)
+    const right = new Uint8Array(buf, 4, 4)
+    Object.defineProperty(left, `byteOffset`, {
+      value: 4,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    Object.defineProperty(right, `byteOffset`, {
+      value: 4,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    return {
+      name: `non-equal Uint8Array byteOffsets with shadowed byteOffset`,
+      left,
+      right,
       diffs: [
         {
           kind: `value`,
@@ -1144,6 +1509,35 @@ const cases: Case[] = [
       },
     ],
   },
+  (() => {
+    const left = new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    const right = new Temporal.Duration(2, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    Object.defineProperty(left, `years`, {
+      value: 2,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    Object.defineProperty(right, `years`, {
+      value: 2,
+      configurable: true,
+      writable: true,
+      enumerable: true,
+    })
+    return {
+      name: `non-equal Duration years with shadowed years getter`,
+      left,
+      right,
+      diffs: [
+        {
+          kind: `value`,
+          path: [{ kind: `internal-slot`, slot: `Years` }],
+          left: 1,
+          right: 2,
+        },
+      ],
+    }
+  })(),
   {
     name: `non-equal Duration months`,
     left: new Temporal.Duration(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
