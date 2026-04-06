@@ -21,13 +21,13 @@
 </div>
 
 <div align="center">
-  Find any observable difference between two values.
+  Find all observable differences between two values.
 </div>
 
 ## Features
 
-- **Strict:** Finds the most minuscule differences between values.
-- **Structured:** Each diff has a structured path to the diff
+- **Strict:** Finds the most minuscule differences between values
+- **Structured:** Diff objects have paths and left vs right values
 - **Lazy:** Returns a lazy iterable over the diffs
 
 ## Install
@@ -84,6 +84,30 @@ console.log([...strictDiff(left, { a: 1 })])
 //       ],
 //       left: false,
 //       right: true,
+//     },
+//   ]
+
+// Reference structure diff (shared object used at different positions)
+const shared1 = {}
+const shared2 = {}
+const leftArray = [shared1, shared2, shared1, shared2]
+const rightArray = [shared1, shared2, shared1, shared1]
+console.log([...strictDiff(leftArray, rightArray)])
+//=> [
+//     {
+//       kind: 'reference',
+//       path: [
+//         { kind: 'property', index: 3, key: 3 },
+//         { kind: 'internal-slot', slot: 'Value' },
+//       ],
+//       leftFirstSeenPath: [
+//         { kind: 'property', index: 1, key: 1 },
+//         { kind: 'internal-slot', slot: 'Value' },
+//       ],
+//       rightFirstSeenPath: [
+//         { kind: 'property', index: 0, key: 0 },
+//         { kind: 'internal-slot', slot: 'Value' },
+//       ],
 //     },
 //   ]
 

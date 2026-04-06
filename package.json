@@ -6,7 +6,7 @@
     "email": "tomer@aberba.ch",
     "url": "https://tomeraberba.ch"
   },
-  "description": "Find any observable difference between two values.",
+  "description": "Find all observable difference between two values.",
   "keywords": [
     "deep",
     "diff",
