@@ -53,7 +53,7 @@
   },
   "prettier": "@tomer/prettier-config",
   "dependencies": {
-    "builtin-type": "^0.0.5"
+    "builtin-type": "^0.0.6"
   },
   "devDependencies": {
     "@fast-check/vitest": "^0.3.0",
