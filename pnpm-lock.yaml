@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       builtin-type:
-        specifier: ^0.0.5
-        version: 0.0.5
+        specifier: ^0.0.6
+        version: 0.0.6
     devDependencies:
       '@fast-check/vitest':
         specifier: ^0.3.0
@@ -1193,8 +1193,8 @@ packages:
     resolution: {integrity: sha512-bkXY9WsVpY7CvMhKSR6pZilZu9Ln5WDrKVBUXf2S443etkmEO4V58heTecXcUIsNsi4Rx8JUO4NfX1IcQl4deg==}
     engines: {node: '>=18.20'}
 
-  builtin-type@0.0.5:
-    resolution: {integrity: sha512-g4RVl1minIemTfhyCYZBxbVvxI0GCYBmB02FIYLMtluzAd/uxLMpkHrOj6rp/rKKlULKt655cO+k7VfJW3xeuw==}
+  builtin-type@0.0.6:
+    resolution: {integrity: sha512-oUEiKcw5oVedQ3RpazOoMgYtiK928VGp3C1cbu/qzhj81fNFusCIWl9Du4Z69mvkvko//1Du8qh3ffyMokVxiw==}
     engines: {node: '>= 22'}
 
   cac@7.0.0:
@@ -4006,7 +4006,7 @@ snapshots:
 
   builtin-modules@5.0.0: {}
 
-  builtin-type@0.0.5: {}
+  builtin-type@0.0.6: {}
 
   cac@7.0.0: {}
 
